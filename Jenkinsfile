@@ -1,27 +1,51 @@
-pipeline {
+pipeline{
     agent any
-     tools {nodejs "node"}
-     environment {
-            CI = 'true'
-        }
-    stages {
-        stage('Build') {
-            steps {
-                sh 'npm install'
+    tools {
+      nodejs 'node'
+    }
+    environment {
+      DOCKER_TAG = getVersion()
+    }
+    stages{
+        stage('SCM'){
+            steps{
+                git credentialsId: 'github', 
+                    url: 'https://github.com/Thoshinny-cyber/simple-node-js-react-npm-app.git'
             }
         }
-        stage('Test') {
-                    steps {
-                        sh './jenkins/scripts/test.sh'
-                    }
+        
+        stage('Build') {
+            steps {
+                sh 'tar czf Node.tar.gz package.json public src'
+            }
+        }
+        
+        stage('Docker Build'){
+            steps{
+                sh "tar -xf  Node.tar.gz"
+                sh "docker build . -t thoshinny/nodeapp:${DOCKER_TAG} "
+            }
+        }
+        
+        stage('DockerHub Push'){
+            steps{
+                withCredentials([string(credentialsId: 'docker_hub1', variable: 'dockerHubPwd')]) {
+                    sh "docker login -u thoshinny -p ${dockerHubPwd}"
                 }
-                stage('Deliver') {
-                            steps {
-                                sh './jenkins/scripts/deliver.sh'
-                                input message: 'Finished using the web site? (Click "Proceed" to continue)'
-                                sh './jenkins/scripts/kill.sh'
-                            }
-                        }
-
+                
+                sh "docker push thoshinny/nodeapp:${DOCKER_TAG} "
+            }
+        }
+        
+        stage('Docker Deploy'){
+            steps{
+              ansiblePlaybook credentialsId: 'dev-server', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=${DOCKER_TAG}", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
+            }
+        }
     }
+}
+
+def getVersion(){
+    def commitHash = sh label: '', returnStdout: true, script: 'git rev-parse --short HEAD'
+    return commitHash
 }
