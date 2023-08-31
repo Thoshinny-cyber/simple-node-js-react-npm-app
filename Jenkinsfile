@@ -23,7 +23,7 @@ pipeline{
         stage('Docker Build'){
             steps{
                 //sh "tar -xf  Node.tar.gz"
-                //sh 'npm install'
+                sh 'npm install'
                 sh "docker build . -t thoshinny/nodeapp:${DOCKER_TAG} "
             }
         }
