@@ -1,8 +1,8 @@
 FROM node
 WORKDIR /app
-#COPY package.json ./
+COPY package.json ./
+CMD npm install
 COPY . .
-#CMD npm install
 EXPOSE 3000
 CMD npm start
 
