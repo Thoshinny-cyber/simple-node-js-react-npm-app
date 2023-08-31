@@ -14,16 +14,16 @@ pipeline{
             }
         }
         
-        //stage('Build') {
-          //  steps {
-            //    sh 'tar czf Node.tar.gz package.json public src'
-            //}
-        //}
+        stage('Build') {
+            steps {
+                sh 'tar czf Node.tar.gz package.json public src'
+            }
+        }
         
         stage('Docker Build'){
             steps{
-                //sh "tar -xf  Node.tar.gz"
-                sh 'npm install'
+                sh "tar -xf  Node.tar.gz"
+                //sh 'npm install'
                 sh "docker build . -t thoshinny/nodeapp:${DOCKER_TAG} "
             }
         }
