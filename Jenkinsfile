@@ -23,7 +23,7 @@ pipeline{
         stage('Docker Build'){
             steps{
                 sh "tar -xf Node.tar.gz"
-                sh "docker build --no-cache . -t thoshinny/nodeapp:${DOCKER_TAG} "
+                sh "docker build . -t thoshinny/nodeapp:${DOCKER_TAG} "
             }
         }
         
