@@ -34,9 +34,9 @@ pipeline{
                 excludes: '',
                 execCommand: """cd /opt/docker; 
                                 tar -xf Node.tar.gz; 
-                                docker build . -t thoshinny/nodeapp:latest;
+                                docker build . -t thoshinny/nodeapp:$DOCKER_TAG;
                                 docker login -u thoshinny -p $DOCKER_CRED;
-                                docker push thoshinny/nodeapp:latest""",
+                                docker push thoshinny/nodeapp:$DOCKER_TAG""",
                 execTimeout: 120000,
                 flatten: false,
                 makeEmptyDirs: false,
@@ -69,7 +69,7 @@ pipeline{
         
         stage('Docker Deploy'){
             steps{
-              ansiblePlaybook credentialsId: 'dev-server', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=latest", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
+              ansiblePlaybook credentialsId: 'dev-server', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=${DOCKER_TAG}", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
             }
         }
     }
