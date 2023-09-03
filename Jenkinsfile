@@ -34,7 +34,7 @@ pipeline{
                 excludes: '',
                 execCommand: """cd /opt/docker; 
                                 tar -xf Node.tar.gz; 
-                                docker build -t node:latest .;
+                                docker build -t nodeapp:latest .;
                                 docker login -u thoshinny -p $DOCKER_CRED;
                                 docker push thoshinny/nodeapp:latest""",
                 execTimeout: 120000,
