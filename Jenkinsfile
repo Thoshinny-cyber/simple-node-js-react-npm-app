@@ -5,6 +5,7 @@ pipeline{
     }
     environment {
       DOCKER_TAG = getVersion()
+      withCredentials([string(credentialsId: 'docker_hub1', variable: 'dockerHubPwd')])
     }
     stages{
         stage('SCM'){
@@ -22,20 +23,26 @@ pipeline{
         
         stage('Docker Build'){
             steps{
-                sh "tar -xf Node.tar.gz"
-                sh "docker build . -t thoshinny/nodeapp:${DOCKER_TAG} "
+                //sh "tar -xf Node.tar.gz"
+                //sh "docker build . -t thoshinny/nodeapp:${DOCKER_TAG} "
+                sshPublisher(publishers: [sshPublisherDesc(configName: 'dockerhost', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd /opt/docker;
+tar -xf  Node.tar.gz;
+docker build -t node:latest .;
+docker login -u thoshinny -p \${dockerHubPwd};
+docker push thoshinny/nodeapp:\${DOCKER_TAG}''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '//opt//docker', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*.gz')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+            
             }
         }
         
-        stage('DockerHub Push'){
-            steps{
-                withCredentials([string(credentialsId: 'docker_hub1', variable: 'dockerHubPwd')]) {
-                    sh "docker login -u thoshinny -p ${dockerHubPwd}"
-                }
+        //stage('DockerHub Push'){
+          //  steps{
+            //    withCredentials([string(credentialsId: 'docker_hub1', variable: 'dockerHubPwd')]) {
+              //      sh "docker login -u thoshinny -p ${dockerHubPwd}"
+                //}
                 
-                sh "docker push thoshinny/nodeapp:${DOCKER_TAG} "
-            }
-        }
+                //sh "docker push thoshinny/nodeapp:${DOCKER_TAG} "
+            //}
+        //}
         
         stage('Docker Deploy'){
             steps{
