@@ -5,7 +5,7 @@ pipeline{
     }
     environment {
       DOCKER_TAG = getVersion()
-      withCredentials([string(credentialsId: 'docker_hub1', variable: 'dockerHubPwd')])
+      dockerHubPwd= credentials('docker_hub1')
     }
     stages{
         stage('SCM'){
