@@ -25,11 +25,35 @@ pipeline{
             steps{
                 //sh "tar -xf Node.tar.gz"
                 //sh "docker build . -t thoshinny/nodeapp:${DOCKER_TAG} "
-              sshPublisher(publishers: [sshPublisherDesc(configName: 'dockerhost', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd /opt/docker; 
-tar -xf  Node.tar.gz; 
-docker build -t node:latest .;
-docker login -u thoshinny -p \$DOCKER_CRED;
-docker push thoshinny/nodeapp:\$DOCKER_TAG''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+$', remoteDirectory: '//opt//docker', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*.gz')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+                sshPublisher(publishers: [
+    sshPublisherDesc(
+        configName: 'dockerhost',
+        transfers: [
+            sshTransfer(
+                cleanRemote: false,
+                excludes: '',
+                execCommand: """cd /opt/docker; 
+                                tar -xf Node.tar.gz; 
+                                docker build -t node:latest .;
+                                docker login -u thoshinny -p $DOCKER_CRED;
+                                docker push thoshinny/nodeapp:$DOCKER_TAG""",
+                execTimeout: 120000,
+                flatten: false,
+                makeEmptyDirs: false,
+                noDefaultExcludes: false,
+                patternSeparator: '[, ]+$',
+                remoteDirectory: '//opt//docker',
+                remoteDirectorySDF: false,
+                removePrefix: '',
+                sourceFiles: '**/*.gz'
+            )
+        ],
+        usePromotionTimestamp: false,
+        useWorkspaceInPromotion: false,
+        verbose: true
+    )
+])
+
         }
         }
         
