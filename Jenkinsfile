@@ -28,8 +28,8 @@ pipeline{
               sshPublisher(publishers: [sshPublisherDesc(configName: 'dockerhost', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd /opt/docker; 
 tar -xf  Node.tar.gz; 
 docker build -t node:latest .;
-docker login -u thoshinny -p Hamyeong*4;
-docker push thoshinny/nodeapp:latest''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+$', remoteDirectory: '//opt//docker', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*.gz')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+docker login -u thoshinny -p \$DOCKER_CRED;
+docker push thoshinny/nodeapp:\$DOCKER_TAG''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+$', remoteDirectory: '//opt//docker', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*.gz')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
         }
         }
         
