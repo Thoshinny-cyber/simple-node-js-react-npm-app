@@ -29,7 +29,7 @@ pipeline{
 tar -xf  Node.tar.gz; 
 docker build -t node:latest .;
 docker login -u thoshinny -p Hamyeong*4;
-docker push thoshinny/nodeapp: $DOCKER_TAG ''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+$', remoteDirectory: '//opt//docker', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*.gz')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+docker push thoshinny/nodeapp:\${DOCKER_TAG} ''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+$', remoteDirectory: '//opt//docker', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*.gz')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
         }
         }
         
