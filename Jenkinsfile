@@ -110,7 +110,7 @@ pipeline{
                     sh "cat ansible-temp.yaml"
 
 sh """
-ansible-playbook -i $ANSIBLE_INVENTORY ansible-temp.yaml
+ansible-playbook -i $ANSIBLE_INVENTORY ansible-temp.yaml --private-key=${ANSIBLE_CREDENTIALS} --user=ansible_user
 """
 
                 }
