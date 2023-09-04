@@ -73,7 +73,7 @@ pipeline{
         stage('Docker Deploy'){
             steps{
               script {
-                    def ansibleCode = """
+                    def ansibleCode = '''
             ---
             - hosts: dev
               become: True
@@ -102,7 +102,7 @@ pipeline{
                     state: started
                     published_ports:
                       - 0.0.0.0:8081:3000
-            """
+            '''
                 //     def playbookFile = writeFile file: 'ansible-playbook.yml', text: ansibleCode
                 //     sh "ansible-playbook ${playbookFile} --inventory-file=${env.ANSIBLE_INVENTORY} --extra-vars='${env.ANSIBLE_EXTRAS}'"
                 def playbookFile = writeFile file: 'ansible-temp.yaml', text: ansibleCode
