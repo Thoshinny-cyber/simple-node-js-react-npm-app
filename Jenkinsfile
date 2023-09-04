@@ -6,6 +6,9 @@ pipeline{
     environment {
       DOCKER_TAG = getVersion()
       DOCKER_CRED= credentials('docker_hub1')
+      ANSIBLE_EXTRAS= "-e DOCKER_TAG=latest"
+      ANSIBLE_CREDENTIALS= credentials('dev-server')
+      ANSIBLE_INVENTORY= 'dev.inv'
     }
     stages{
         stage('SCM'){
@@ -69,7 +72,42 @@ pipeline{
         
         stage('Docker Deploy'){
             steps{
-              ansiblePlaybook credentialsId: 'dev-server', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=latest", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
+              script {
+                    def ansibleCode = """
+                    ---
+- hosts: dev
+  become: True
+  tasks:
+    - name: Install python pip
+      yum:
+        name: python-pip
+        state: present
+    - name: Install docker
+      yum:
+        name: docker
+        state: present
+    - name: start docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+    - name: Install docker-py python module
+      pip:
+        name: docker-py
+        state: present
+    - name: Start the container
+      docker_container:
+        name: javaapp
+        image: "thoshinny/nodeapp:{{DOCKER_TAG}}"
+        state: started
+        published_ports:
+          - 0.0.0.0:8081:3000
+                    """
+                    def playbookFile = writeFile file: 'ansible-playbook.yml', text: ansibleCode
+                    sh "ansible-playbook ${playbookFile} --inventory-file=${env.ANSIBLE_INVENTORY} --extra-vars='${env.ANSIBLE_EXTRAS}' --vault-password-string='${env.ANSIBLE_CREDENTIALS}'"
+                }
+              //ansiblePlaybook credentialsId: 'dev-server', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=latest", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
+               
             }
         }
     }
