@@ -7,7 +7,7 @@ pipeline{
       DOCKER_TAG = getVersion()
       DOCKER_CRED= credentials('docker_hub1')
       ANSIBLE_EXTRAS= "-e DOCKER_TAG=latest"
-      ANSIBLE_CREDENTIALS= credentials('dev-server')
+      ANSIBLE_CREDENTIALS= 'dev-server'
       ANSIBLE_INVENTORY= 'dev.inv'
     }
     stages{
