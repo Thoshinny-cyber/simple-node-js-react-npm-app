@@ -77,7 +77,7 @@ pipeline{
             '''
             ---
             - hosts: dev
-              become: True
+              become: yes
               tasks:
                 - name: Install python pip
                   yum:
