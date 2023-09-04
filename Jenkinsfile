@@ -104,7 +104,7 @@ pipeline{
           - 0.0.0.0:8081:3000
                     """
                     def playbookFile = writeFile file: 'ansible-playbook.yml', text: ansibleCode
-                    sh "ansible-playbook ${playbookFile} --inventory-file=${env.ANSIBLE_INVENTORY} --extra-vars='${env.ANSIBLE_EXTRAS}'"
+                    sh "ansible-playbook ${playbookFile} --inventory-file=${env.ANSIBLE_INVENTORY} --extra-vars=${env.ANSIBLE_EXTRAS}"
                 }
               //ansiblePlaybook credentialsId: 'dev-server', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=latest", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
                
