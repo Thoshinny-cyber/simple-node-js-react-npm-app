@@ -6,9 +6,9 @@ pipeline{
     environment {
       DOCKER_TAG = getVersion()
       DOCKER_CRED= credentials('docker_hub1')
-      ANSIBLE_EXTRAS= "-e DOCKER_TAG=latest"
+      ANSIBLE_EXTRAS="-e DOCKER_TAG=latest"
       ANSIBLE_CREDENTIALS= credentials('dev-server')
-      ANSIBLE_INVENTORY= 'dev.inv'
+      ANSIBLE_INVENTORY='dev.inv'
     }
     stages{
         stage('SCM'){
@@ -104,7 +104,7 @@ pipeline{
           - 0.0.0.0:8081:3000
                     """
                     def playbookFile = writeFile file: 'ansible-playbook.yml', text: ansibleCode
-                    sh "ansible-playbook ${playbookFile} --inventory-file=${env.ANSIBLE_INVENTORY} --extra-vars=${env.ANSIBLE_EXTRAS}"
+                    sh "ansible-playbook ${playbookFile} --inventory-file=${env.ANSIBLE_INVENTORY} --extra-vars='${env.ANSIBLE_EXTRAS}'"
                 }
               //ansiblePlaybook credentialsId: 'dev-server', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=latest", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
                
