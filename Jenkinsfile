@@ -113,7 +113,7 @@ ansible-playbook ${playbookFile} \\
 --extra-vars='${env.ANSIBLE_EXTRAS}'
 """
 
-                // }
+                }
               //ansiblePlaybook credentialsId: 'dev-server', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=latest", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
                
             }
