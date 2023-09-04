@@ -98,7 +98,7 @@ pipeline{
                 - name: Start the container
                   docker_container:
                     name: javaapp
-                    image: "thoshinny/nodeapp:${DOCKER_TAG}"
+                    image: "thoshinny/nodeapp:latest"
                     state: started
                     published_ports:
                       - 0.0.0.0:8081:3000
@@ -109,8 +109,6 @@ pipeline{
 
 sh """
 echo '$ansibleCode' | ansible-playbook - \\
---inventory-file=${env.ANSIBLE_INVENTORY} \\
---extra-vars='${env.ANSIBLE_EXTRAS}'
 """
 
                 }
