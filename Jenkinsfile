@@ -75,7 +75,6 @@ pipeline{
               script {
                     def ansibleCode = 
             '''
-            ---
             - hosts: dev
               become: yes
               tasks:
