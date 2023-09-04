@@ -73,7 +73,8 @@ pipeline{
         stage('Docker Deploy'){
             steps{
               script {
-                    def ansibleCode = '''
+                    def ansibleCode = 
+            '''
             ---
             - hosts: dev
               become: True
