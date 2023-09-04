@@ -76,7 +76,7 @@ pipeline{
                     def ansibleCode = 
             '''
             - hosts: dev
-              become: yes
+              become: True
               tasks:
                 - name: Install python pip
                   yum:
