@@ -74,38 +74,46 @@ pipeline{
             steps{
               script {
                     def ansibleCode = """
-                    ---
-- hosts: dev
-  become: True
-  tasks:
-    - name: Install python pip
-      yum:
-        name: python-pip
-        state: present
-    - name: Install docker
-      yum:
-        name: docker
-        state: present
-    - name: start docker
-      service:
-        name: docker
-        state: started
-        enabled: yes
-    - name: Install docker-py python module
-      pip:
-        name: docker-py
-        state: present
-    - name: Start the container
-      docker_container:
-        name: javaapp
-        image: "thoshinny/nodeapp:{DOCKER_TAG}"
-        state: started
-        published_ports:
-          - 0.0.0.0:8081:3000
-                    """
-                    def playbookFile = writeFile file: 'ansible-playbook.yml', text: ansibleCode
-                    sh "ansible-playbook ${playbookFile} --inventory-file=${env.ANSIBLE_INVENTORY} --extra-vars='${env.ANSIBLE_EXTRAS}'"
-                }
+            ---
+            - hosts: dev
+              become: True
+              tasks:
+                - name: Install python pip
+                  yum:
+                    name: python-pip
+                    state: present
+                - name: Install docker
+                  yum:
+                    name: docker
+                    state: present
+                - name: start docker
+                  service:
+                    name: docker
+                    state: started
+                    enabled: yes
+                - name: Install docker-py python module
+                  pip:
+                    name: docker-py
+                    state: present
+                - name: Start the container
+                  docker_container:
+                    name: javaapp
+                    image: "thoshinny/nodeapp:${DOCKER_TAG}"
+                    state: started
+                    published_ports:
+                      - 0.0.0.0:8081:3000
+            """
+                //     def playbookFile = writeFile file: 'ansible-playbook.yml', text: ansibleCode
+                //     sh "ansible-playbook ${playbookFile} --inventory-file=${env.ANSIBLE_INVENTORY} --extra-vars='${env.ANSIBLE_EXTRAS}'"
+                def playbookFile = writeFile file: 'ansible-playbook.yml', text: ansibleCode
+
+sh """
+ansible-playbook ${playbookFile} \\
+--inventory-file=${env.ANSIBLE_INVENTORY} \\
+--extra-vars='${env.ANSIBLE_EXTRAS}'
+"""
+
+                // }
               //ansiblePlaybook credentialsId: 'dev-server', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=latest", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
                
             }
