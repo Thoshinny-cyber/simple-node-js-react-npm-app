@@ -105,10 +105,10 @@ pipeline{
             """
                 //     def playbookFile = writeFile file: 'ansible-playbook.yml', text: ansibleCode
                 //     sh "ansible-playbook ${playbookFile} --inventory-file=${env.ANSIBLE_INVENTORY} --extra-vars='${env.ANSIBLE_EXTRAS}'"
-                def playbookFile = writeFile file: 'ansible-playbook.yml', text: ansibleCode
+                def playbookFile = writeFile file: 'ansible-temp.yaml', text: ansibleCode
 
 sh """
-echo '$ansibleCode' | ansible-playbook - \\
+ansible-playbook -i $ANSIBLE_INVENTORY ansible-temp.yaml
 """
 
                 }
