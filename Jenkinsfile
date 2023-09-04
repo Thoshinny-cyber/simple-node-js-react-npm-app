@@ -108,7 +108,7 @@ pipeline{
                 def playbookFile = writeFile file: 'ansible-playbook.yml', text: ansibleCode
 
 sh """
-echo $ansibleCode | ansible-playbook - \\
+ansible-playbook - \\
 --inventory-file=${env.ANSIBLE_INVENTORY} \\
 --extra-vars='${env.ANSIBLE_EXTRAS}'
 """
