@@ -16,11 +16,31 @@ pipeline{
                 git credentialsId: 'github', 
                     url: 'https://github.com/Thoshinny-cyber/simple-node-js-react-npm-app.git'
             }
+             post {
+                success {
+                    emailext(
+                        subject: 'Approval Needed for SCM Stage',
+                        body: 'Please review and approve the SCM stage.',
+                        to: 'thoshlearn@gmail.com',
+                        attachLog: true
+                    )
+                }
+            }
         }
         
         stage('Build') {
             steps {
                 sh 'tar czf Node.tar.gz package.json public src'
+            }
+            post {
+                success {
+                    emailext(
+                        subject: 'Approval Needed for Build Stage',
+                        body: 'Please review and approve the Build stage.',
+                        to: 'thoshlearn@gmail.com',
+                        attachLog: true
+                    )
+                }
             }
         }
         
@@ -58,6 +78,16 @@ pipeline{
 ])
 
         }
+             post {
+                success {
+                    emailext(
+                        subject: 'Approval Needed for Docker build Stage',
+                        body: 'Please review and approve the Docker Build stage.',
+                        to: 'thoshlearn@gmail.com',
+                        attachLog: true
+                    )
+                }
+            }
         }
         
         //stage('DockerHub Push'){
@@ -114,6 +144,16 @@ ansible-playbook -i $ANSIBLE_INVENTORY ansible-temp.yaml --private-key=${ANSIBLE
                 }
               //ansiblePlaybook credentialsId: 'dev-server', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=latest", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
                
+            }
+             post {
+                success {
+                    emailext(
+                        subject: 'Approval Needed for Deploy Stage',
+                        body: 'Please review and approve the Deploy stage.',
+                        to: 'thoshlearn@gmail.com',
+                        attachLog: true
+                    )
+                }
             }
         }
     }
