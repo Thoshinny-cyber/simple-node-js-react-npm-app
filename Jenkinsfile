@@ -142,7 +142,7 @@ post {
             """,
             subject: "Build ${env.JOB_NAME} ${env.BUILD_NUMBER} completed",
             to: "thoshlearn@gmail.com",
-            recipientProviders: [developers()],
+            // recipientProviders: [developers()],
             mimeType: 'text/html',
 
 
