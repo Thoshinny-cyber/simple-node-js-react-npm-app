@@ -99,7 +99,7 @@ pipeline{
  
 
                    def ansibleInventoryContent = '''[dev]
-                    172.31.43.130 ansible_user=ec2-user
+                    172.31.42.16 ansible_user=ec2-user
                     '''
 
  
