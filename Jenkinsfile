@@ -30,7 +30,7 @@ pipeline{
         sh "echo ${DOCKER_TAG}"
         sshPublisher(publishers: [
             sshPublisherDesc(
-                configName: 'docker',
+                configName: 'dockerhost',
                 transfers: [
                     sshTransfer(
                         cleanRemote: false,
